@@ -5,12 +5,16 @@ public class Editor {
         JFrame frame = new JFrame("Editor");
         Editor editor = new Editor();
 
-        JMenuBar menubar = new JMenuBar();
-        JMenu menu1 = new JMenu("File");
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menuFile = new JMenu("File");
         JMenuItem newFile = new JMenuItem("New");
-        menu1.add(newFile);
-        menubar.add(menu1);
-        frame.add(menubar);
+        JMenuItem openFile = new JMenuItem("Open");
+        JMenuItem saveFile = new JMenuItem("Save");
+        menuFile.add(newFile);
+        menuFile.add(openFile);
+        menuFile.add(saveFile);
+        menuBar.add(menuFile);
+        frame.setJMenuBar(menuBar);
 
         frame.setSize(600, 800);
         frame.setContentPane(editor.panel);
