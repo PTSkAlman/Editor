@@ -7,49 +7,15 @@ import java.awt.event.ActionListener;
 import java.io.*;
 
 public class Editor {
+
     public Editor() {
         createMenu();
-        clearButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                textArea.setText("");
-            }
-        });
-        copyButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                StringSelection stringSelection = new StringSelection(textArea.getText());
-                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                clipboard.setContents(stringSelection, null);
-            }
-        });
-        donateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println("Scammad!");
-            }
-        });
-        openFile.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                JFileChooser fc = new JFileChooser();
-                int result = fc.showOpenDialog(null);
-                String filename;
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    filename = fc.getSelectedFile().getAbsolutePath();
-                } else {
-                    filename = "exempel.txt";
-                }
-
-                FileReader fr = null;
-                try {
-                    fr = new FileReader(filename);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                BufferedReader inFile = new BufferedReader(fr);
-            }
-        });
+        clearButton.addActionListener(new clear() {});
+        copyButton.addActionListener(new copy() {});
+        donateButton.addActionListener(new donate() {});
+        newFile.addActionListener(new nFile() {});
+        openFile.addActionListener(new oFile() {});
+        saveFile.addActionListener(new sFile() {});
     }
     JMenuBar menuBar;
     JMenu menuFile;
@@ -89,5 +55,77 @@ public class Editor {
     private JButton clearButton;
 
 
+    private class copy implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            StringSelection stringSelection = new StringSelection(textArea.getText());
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, null);
+        }
+    }
 
+    private class donate implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            System.out.println("Scammad!");
+        }
+    }
+
+    private class clear implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            textArea.setText("");
+        }
+    }
+
+    private class nFile implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            if (textArea.getText().length() > 0) {
+                int confirm = JOptionPane.showConfirmDialog(null, "Do you want to save?", "New File", JOptionPane.YES_NO_OPTION);
+                if (confirm == 0) {
+                    //Save file code
+                } else {
+                    textArea.setText("");
+                }
+            } else {
+                textArea.setText("");
+            }
+        }
+    }
+
+    private class oFile implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            JFileChooser fc = new JFileChooser();
+            int confirm = fc.showOpenDialog(null);
+            String filename;
+            if (confirm == JFileChooser.APPROVE_OPTION) {
+                filename = fc.getSelectedFile().getAbsolutePath();
+            } else {
+                filename = "Textfile.txt";
+            }
+            BufferedReader br = null;
+            try {
+                br = new BufferedReader(new FileReader(filename));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            String line;
+            try {
+                while ((line = br.readLine()) != null) {
+                    textArea.append(line + "\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class sFile implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+
+        }
+    }
 }
